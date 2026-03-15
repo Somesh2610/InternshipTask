@@ -422,7 +422,7 @@ onClick={(e)=>{e.stopPropagation();deleteMember(member.id)}}
 />
 
 </div>
-
+    
 )}
 
 </div>
