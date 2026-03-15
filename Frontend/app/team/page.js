@@ -32,13 +32,24 @@ const [loginFocus,setLoginFocus] = useState(false);
 const ADMIN_PASSWORD="somesh2610";
 
 
-useEffect(()=>{
+useEffect(() => {
 
-fetch("https://internshiptask-86c7.onrender.com/team")
-.then(res=>res.json())
-.then(data=>setTeam(data));
+const loadTeam = async () => {
+  try {
+    const res = await fetch("https://internshiptask-86c7.onrender.com/team");
 
-},[]);
+    const data = await res.json();
+
+    setTeam(data);
+
+  } catch (err) {
+    console.error("Failed to load team:", err);
+  }
+};
+
+loadTeam();
+
+}, []);
 
 
 
@@ -422,7 +433,7 @@ onClick={(e)=>{e.stopPropagation();deleteMember(member.id)}}
 />
 
 </div>
-    
+
 )}
 
 </div>
