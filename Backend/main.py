@@ -1,30 +1,23 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import List
-from fastapi.middleware.cors import CORSMiddleware
+from pymongo import MongoClient
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # allows all frontends
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-origins = [
-    "http://localhost:3000",
-]
+# MongoDB connection
+client = MongoClient("mongodb+srv://somesh:<db_password>@cluster0.yste8tw.mongodb.net/?appName=Cluster0")
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+db = client["team_database"]
+collection = db["team"]
 
 class TeamMember(BaseModel):
     id: int
@@ -35,50 +28,28 @@ class TeamMember(BaseModel):
     linkedin: str
 
 
-team_db: List[TeamMember] = [
-    TeamMember(
-        id=1,
-        name="Alice Johnson",
-        role="Frontend Engineer",
-        bio="Passionate about UI and design.",
-        photo="https://randomuser.me/api/portraits/women/44.jpg",
-        linkedin="https://linkedin.com"
-    ),
-    TeamMember(
-        id=2,
-        name="David Lee",
-        role="Backend Engineer",
-        bio="Loves building scalable APIs.",
-        photo="https://randomuser.me/api/portraits/men/32.jpg",
-        linkedin="https://linkedin.com"
-    )
-]
-
-
 @app.get("/team")
 def get_team():
-    return team_db
+    members = list(collection.find({}, {"_id": 0}))
+    return members
 
 
 @app.post("/team")
 def add_member(member: TeamMember):
-    team_db.append(member)
-    return {"message": "Member added", "member": member}
+    collection.insert_one(member.dict())
+    return {"message": "Member added"}
 
 
 @app.put("/team/{member_id}")
 def update_member(member_id: int, updated_member: TeamMember):
-    for i, member in enumerate(team_db):
-        if member.id == member_id:
-            team_db[i] = updated_member
-            return {"message": "Member updated"}
-    return {"error": "Member not found"}
+    collection.update_one(
+        {"id": member_id},
+        {"$set": updated_member.dict()}
+    )
+    return {"message": "Member updated"}
 
 
 @app.delete("/team/{member_id}")
 def delete_member(member_id: int):
-    for member in team_db:
-        if member.id == member_id:
-            team_db.remove(member)
-            return {"message": "Member deleted"}
-    return {"error": "Member not found"}
+    collection.delete_one({"id": member_id})
+    return {"message": "Member deleted"}
