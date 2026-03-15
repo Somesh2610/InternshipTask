@@ -5,13 +5,9 @@ from typing import List
 
 app = FastAPI()
 
-origins = [
-    "http://localhost:3000",
-]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -44,32 +40,3 @@ team_db: List[TeamMember] = [
         linkedin="https://linkedin.com"
     )
 ]
-
-
-@app.get("/team")
-def get_team():
-    return team_db
-
-
-@app.post("/team")
-def add_member(member: TeamMember):
-    team_db.append(member)
-    return {"message": "Member added", "member": member}
-
-
-@app.put("/team/{member_id}")
-def update_member(member_id: int, updated_member: TeamMember):
-    for i, member in enumerate(team_db):
-        if member.id == member_id:
-            team_db[i] = updated_member
-            return {"message": "Member updated"}
-    return {"error": "Member not found"}
-
-
-@app.delete("/team/{member_id}")
-def delete_member(member_id: int):
-    for member in team_db:
-        if member.id == member_id:
-            team_db.remove(member)
-            return {"message": "Member deleted"}
-    return {"error": "Member not found"}
