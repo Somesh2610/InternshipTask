@@ -14,10 +14,11 @@ app.add_middleware(
 )
 
 # MongoDB connection
-client = MongoClient("mongodb+srv://somesh:s1o2m3e4s5h6h@cluster0.yste8tw.mongodb.net/?appName=Cluster0")
+client = MongoClient("YOUR_MONGODB_CONNECTION_STRING")
 
 db = client["team_database"]
 collection = db["team"]
+
 
 class TeamMember(BaseModel):
     id: int
@@ -28,14 +29,14 @@ class TeamMember(BaseModel):
     linkedin: str
 
 
+@app.get("/")
+def home():
+    return {"message": "Backend running"}
+
+
 @app.get("/team")
 def get_team():
-    members = []
-    
-    for member in collection.find():
-        member["_id"] = str(member["_id"])   # convert MongoDB ObjectId
-        members.append(member)
-
+    members = list(collection.find({}, {"_id": 0}))
     return members
 
 
