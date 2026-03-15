@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaTrash, FaEdit, FaUserShield, FaPlus } from "react-icons/fa";
+import { FaTrash, FaEdit, FaUserShield, FaPlus, FaSearch } from "react-icons/fa";
 
 export default function TeamPage() {
 
@@ -24,9 +24,12 @@ const [editingMember,setEditingMember]=useState(null);
 const [selectedMember,setSelectedMember]=useState(null);
 
 const [search,setSearch]=useState("");
-const [filter,setFilter]=useState("All");
+const [searchOpen,setSearchOpen]=useState(false);
 
-const ADMIN_PASSWORD="admin123";
+const [adminTransition,setAdminTransition] = useState(false);
+const [loginFocus,setLoginFocus] = useState(false);
+
+const ADMIN_PASSWORD="somesh2610";
 
 
 useEffect(()=>{
@@ -45,6 +48,7 @@ if(password===ADMIN_PASSWORD){
 
 setAdminMode(true);
 setShowLogin(false);
+setLoginFocus(false);
 
 }else{
 
@@ -223,20 +227,27 @@ handleImageUpload(file);
 
 
 
-const filteredTeam = team
-.filter(member => member.name.toLowerCase().includes(search.toLowerCase()))
-.filter(member => filter==="All" || member.role===filter);
+const filteredTeam = team.filter(member =>
+member.name.toLowerCase().includes(search.toLowerCase())
+);
 
 
 
 return(
 
-<div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800 text-white font-sans">
+<div className="w-full min-h-screen overflow-x-hidden">
+
+<div className={`text-white font-sans transition-all duration-500
+bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800
+
+${loginFocus ? "scale-95 opacity-60 blur-sm" : "scale-100 opacity-100"}
+
+`}>
 
 
 {/* NAVBAR */}
 
-<nav className="flex justify-between items-center px-10 py-5 backdrop-blur-md bg-white/5 border-b border-white/10">
+<nav className="sticky top-0 z-50 flex flex-col md:flex-row md:justify-between md:items-center px-6 lg:px-12 py-4 backdrop-blur-md bg-slate-900/70 border-b border-white/10 w-full">
 
 <h1 className="text-3xl font-bold tracking-wide text-indigo-300">
 
@@ -244,7 +255,30 @@ Armatrix
 
 </h1>
 
-<div className="flex items-center gap-6">
+<div className="flex items-center gap-4 flex-wrap mt-3 md:mt-0">
+
+<div
+className="flex items-center relative"
+onMouseEnter={()=>setSearchOpen(true)}
+onMouseLeave={()=>setSearchOpen(false)}
+>
+
+<input
+placeholder="Search..."
+value={search}
+onChange={(e)=>setSearch(e.target.value)}
+className={`transition-all duration-500 ease-in-out
+${searchOpen ? "w-32 md:w-48 lg:w-56 opacity-100 px-3" : "w-0 opacity-0"}
+py-2 rounded-lg text-black bg-white outline-none`}
+/>
+
+<FaSearch
+size={18}
+className="cursor-pointer ml-2 hover:text-yellow-300"
+onClick={()=>setSearchOpen(!searchOpen)}
+/>
+
+</div>
 
 <a className="hover:text-indigo-300 cursor-pointer">Home</a>
 <a className="hover:text-indigo-300 cursor-pointer">Team</a>
@@ -254,7 +288,10 @@ Armatrix
 <FaUserShield
 size={22}
 className="cursor-pointer hover:text-indigo-300"
-onClick={()=>setShowLogin(true)}
+onClick={()=>{
+setShowLogin(true);
+setLoginFocus(true);
+}}
 />
 
 )}
@@ -263,7 +300,7 @@ onClick={()=>setShowLogin(true)}
 
 <button
 onClick={logoutAdmin}
-className="bg-red-500 px-4 py-1 rounded hover:bg-red-600"
+className="bg-red-500 px-3 py-1 rounded-lg hover:bg-red-600 text-sm"
 >
 
 Logout
@@ -282,7 +319,7 @@ Logout
 
 <div className="text-center mt-12 mb-10">
 
-<h1 className="text-6xl font-extrabold tracking-wide text-indigo-300">
+<h1 className="text-4xl md:text-6xl font-extrabold tracking-wide text-indigo-300">
 
 Meet Our Team
 
@@ -323,41 +360,15 @@ The amazing people building our company
 
 {/* SEARCH */}
 
-<div className="flex justify-center mb-6">
 
-<input
-placeholder="Search team member..."
-className="w-80 px-4 py-2 rounded-xl text-black"
-value={search}
-onChange={(e)=>setSearch(e.target.value)}
-/>
-
-</div>
-
-
-
-{/* FILTER */}
-
-<div className="flex justify-center gap-4 mb-10">
-
-<button onClick={()=>setFilter("All")} className="px-4 py-2 bg-indigo-600 rounded">All</button>
-<button onClick={()=>setFilter("Frontend Engineer")} className="px-4 py-2 bg-indigo-600 rounded">Frontend</button>
-<button onClick={()=>setFilter("Backend Engineer")} className="px-4 py-2 bg-indigo-600 rounded">Backend</button>
-
-</div>
-
-
-
-{/* TEAM GRID */}
-
-<div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 px-6 pb-20">
+<div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 px-6 pb-20">
 
 {filteredTeam.map(member=>(
 
 <div
 key={member.id}
 onClick={()=>{setSelectedMember(member);setShowProfile(true)}}
-className="bg-white text-black rounded-3xl shadow-xl p-8 text-center transition-all duration-300 hover:-translate-y-4 hover:shadow-2xl hover:shadow-indigo-400/30 hover:scale-105 cursor-pointer"
+className="bg-white text-black rounded-3xl shadow-xl p-8 text-center transition-all duration-500 hover:-translate-y-5 hover:scale-105 hover:bg-gradient-to-br hover:from-yellow-300 hover:to-amber-500 hover:text-black hover:shadow-yellow-400/50 cursor-pointer"
 >
 
 <img
@@ -399,8 +410,8 @@ LinkedIn
 <div className="flex justify-center gap-4 mt-5">
 
 <FaEdit
-size={18}
-className="cursor-pointer hover:text-yellow-500"
+size={24}
+className="cursor-pointer text-gray-700 hover:text-white hover:bg-red-500 p-1 rounded transition-all duration-200"
 onClick={(e)=>{e.stopPropagation();openEditForm(member)}}
 />
 
@@ -489,14 +500,14 @@ className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex it
 )}
 
 
-
+</div>
 {/* LOGIN */}
 
 {showLogin && (
 
-<div className="fixed inset-0 bg-black/60 flex items-center justify-center">
+<div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
 
-<div className="bg-white text-black p-8 rounded-3xl w-80">
+<div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease]">
 
 <h2 className="text-xl font-bold mb-4">Admin Login</h2>
 
@@ -640,5 +651,6 @@ Save
 </div>
 
 );
+
 
 }
