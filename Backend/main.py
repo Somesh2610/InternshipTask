@@ -14,7 +14,7 @@ app.add_middleware(
 )
 
 # MongoDB connection
-client = MongoClient("mongodb+srv://somesh:<db_password>@cluster0.yste8tw.mongodb.net/?appName=Cluster0")
+client = MongoClient("mongodb+srv://somesh:s1o2m3e4s5h6h@cluster0.yste8tw.mongodb.net/?appName=Cluster0")
 
 db = client["team_database"]
 collection = db["team"]
@@ -30,7 +30,12 @@ class TeamMember(BaseModel):
 
 @app.get("/team")
 def get_team():
-    members = list(collection.find({}, {"_id": 0}))
+    members = []
+    
+    for member in collection.find():
+        member["_id"] = str(member["_id"])   # convert MongoDB ObjectId
+        members.append(member)
+
     return members
 
 
