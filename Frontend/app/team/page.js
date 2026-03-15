@@ -34,31 +34,18 @@ const ADMIN_PASSWORD="somesh2610";
 
 useEffect(() => {
 
-  const loadTeam = async () => {
-    try {
-      const res = await fetch("https://internshiptask-86c7.onrender.com/team");
+const loadTeam = async () => {
+  try {
+    const res = await fetch("https://internshiptask-86c7.onrender.com/team");
 
-      if (!res.ok) {
-        throw new Error("API error");
-      }
+    const data = await res.json();
 
-      const data = await res.json();
+    setTeam(data);
 
-      if (Array.isArray(data)) {
-        setTeam(data);
-      } else {
-        setTeam([]);
-      }
-
-    } catch (err) {
-      console.error("Failed to load team:", err);
-      setTeam([]);
-    }
-  };
-
-  loadTeam();
-
-}, []);
+  } catch (err) {
+    console.error("Failed to load team:", err);
+  }
+};
 
 loadTeam();
 
@@ -92,26 +79,15 @@ setAdminMode(false);
 
 
 
-const deleteMember = async (id) => {
+const deleteMember=async(id)=>{
 
-  try {
+await fetch(`https://internshiptask-86c7.onrender.com/team/${id}`,{
 
-    const res = await fetch(
-      `https://internshiptask-86c7.onrender.com/team/${id}`,
-      { method: "DELETE" }
-    );
+method:"DELETE"
 
-    if (!res.ok) throw new Error("Delete failed");
+});
 
-    setTeam(prev => prev.filter(member => member.id !== id));
-
-  } catch (err) {
-    console.error(err);
-  }
-
-;
-
-setTeam(prev => prev.filter(member => member.id !== id));
+setTeam(team.filter(member=>member.id!==id));
 
 };
 
@@ -158,16 +134,15 @@ body:JSON.stringify(updated)
 
 });
 
-setTeam(prev =>
-  prev.map(m => m.id === editingMember.id ? updated : m)
-);
+setTeam(team.map(m=>m.id===editingMember.id?updated:m));
 
 }
 
 else{
 
 const newMember={
-id: Math.floor(Math.random()*100000),
+
+id:Date.now(),
 name,
 role,
 bio,
@@ -176,15 +151,15 @@ linkedin
 
 };
 
-const res = await fetch("https://internshiptask-86c7.onrender.com/team", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(newMember)
+await fetch("https://internshiptask-86c7.onrender.com/team",{
+
+method:"POST",
+headers:{ "Content-Type":"application/json" },
+body:JSON.stringify(newMember)
+
 });
 
-if (res.ok) {
-  setTeam(prev => [...prev, newMember]);
-}
+setTeam([...team,newMember]);
 
 }
 
