@@ -34,18 +34,31 @@ const ADMIN_PASSWORD="somesh2610";
 
 useEffect(() => {
 
-const loadTeam = async () => {
-  try {
-    const res = await fetch("https://internshiptask-86c7.onrender.com/team");
+  const loadTeam = async () => {
+    try {
+      const res = await fetch("https://internshiptask-86c7.onrender.com/team");
 
-    const data = await res.json();
+      if (!res.ok) {
+        throw new Error("API error");
+      }
 
-    setTeam(data);
+      const data = await res.json();
 
-  } catch (err) {
-    console.error("Failed to load team:", err);
-  }
-};
+      if (Array.isArray(data)) {
+        setTeam(data);
+      } else {
+        setTeam([]);
+      }
+
+    } catch (err) {
+      console.error("Failed to load team:", err);
+      setTeam([]);
+    }
+  };
+
+  loadTeam();
+
+}, []);
 
 loadTeam();
 
@@ -79,15 +92,26 @@ setAdminMode(false);
 
 
 
-const deleteMember=async(id)=>{
+const deleteMember = async (id) => {
 
-await fetch(`https://internshiptask-86c7.onrender.com/team/${id}`,{
+  try {
 
-method:"DELETE"
+    const res = await fetch(
+      `https://internshiptask-86c7.onrender.com/team/${id}`,
+      { method: "DELETE" }
+    );
 
-});
+    if (!res.ok) throw new Error("Delete failed");
 
-setTeam(team.filter(member=>member.id!==id));
+    setTeam(prev => prev.filter(member => member.id !== id));
+
+  } catch (err) {
+    console.error(err);
+  }
+
+;
+
+setTeam(prev => prev.filter(member => member.id !== id));
 
 };
 
@@ -134,15 +158,16 @@ body:JSON.stringify(updated)
 
 });
 
-setTeam(team.map(m=>m.id===editingMember.id?updated:m));
+setTeam(prev =>
+  prev.map(m => m.id === editingMember.id ? updated : m)
+);
 
 }
 
 else{
 
 const newMember={
-
-id:Date.now(),
+id: Math.floor(Math.random()*100000),
 name,
 role,
 bio,
@@ -151,15 +176,15 @@ linkedin
 
 };
 
-await fetch("https://internshiptask-86c7.onrender.com/team",{
-
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body:JSON.stringify(newMember)
-
+const res = await fetch("https://internshiptask-86c7.onrender.com/team", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(newMember)
 });
 
-setTeam([...team,newMember]);
+if (res.ok) {
+  setTeam(prev => [...prev, newMember]);
+}
 
 }
 
@@ -238,9 +263,11 @@ handleImageUpload(file);
 
 
 
-const filteredTeam = team.filter(member =>
-member.name.toLowerCase().includes(search.toLowerCase())
-);
+const filteredTeam = Array.isArray(team)
+  ? team.filter(member =>
+      member.name.toLowerCase().includes(search.toLowerCase())
+    )
+  : [];
 
 
 
