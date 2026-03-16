@@ -50,17 +50,25 @@ useEffect(() => {
 const loadTeam = async () => {
   try {
     const res = await fetch("https://internshiptask-86c7.onrender.com/team");
-
     const data = await res.json();
-
     setTeam(data);
-
   } catch (err) {
     console.error("Failed to load team:", err);
   }
 };
 
 loadTeam();
+
+const handleEsc = (e) => {
+  if (e.key === "Escape") {
+    setShowLogin(false);
+    setLoginFocus(false);
+  }
+};
+
+window.addEventListener("keydown", handleEsc);
+
+return () => window.removeEventListener("keydown", handleEsc);
 
 }, []);
 
@@ -548,9 +556,18 @@ className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex it
 
 {showLogin && (
 
-<div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
+<div
+className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50"
+onClick={()=>{
+setShowLogin(false);
+setLoginFocus(false);
+}}
+>
 
-<div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease] backdrop-blur-0">
+<div
+className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.25s_ease-out]"
+onClick={(e)=>e.stopPropagation()}
+>
 
 <div className="flex justify-between items-center mb-4">
 <h2 className="text-xl font-bold">Admin Login</h2>
@@ -560,7 +577,7 @@ onClick={()=>{
 setShowLogin(false);
 setLoginFocus(false);
 }}
-className="text-gray-500 hover:text-black text-lg font-bold"
+className="text-gray-500 hover:text-red-500 transition duration-200 text-lg font-bold"
 >
 ✕
 </button>
