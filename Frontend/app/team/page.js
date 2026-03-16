@@ -573,7 +573,7 @@ onClick={()=>{
 setShowLogin(false);
 setLoginFocus(false);
 }}
-className="text-gray-500 hover:text-red-500 transition duration-200 text-lg font-bold"
+className="w-8 h-8 flex items-center justify-center rounded-full text-gray-600 hover:bg-red-500 hover:text-white transition duration-200"
 >
 ✕
 </button>
