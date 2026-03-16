@@ -14,7 +14,7 @@ app.add_middleware(
 )
 
 # MongoDB connection
-client = MongoClient("YOUR_MONGODB_CONNECTION_STRING")
+client = MongoClient("Ymongodb+srv://somesh:s1o2m3e4s5h6@cluster0.yste8tw.mongodb.net/?appName=Cluster0")
 
 db = client["team_database"]
 collection = db["team"]
