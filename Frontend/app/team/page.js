@@ -14,6 +14,9 @@ const [showProfile,setShowProfile]=useState(false);
 
 const [password,setPassword]=useState("");
 
+const [attempts,setAttempts] = useState(0);
+const [lockTime,setLockTime] = useState(0);
+
 const [name,setName]=useState("");
 const [role,setRole]=useState("");
 const [bio,setBio]=useState("");
@@ -53,17 +56,41 @@ loadTeam();
 
 
 
-const checkPassword=()=>{
+const checkPassword = () => {
 
-if(password===ADMIN_PASSWORD){
+const now = Date.now();
+
+if(now < lockTime){
+alert("😂 Too many wrong attempts! Try again later.");
+return;
+}
+
+if(password === ADMIN_PASSWORD){
 
 setAdminMode(true);
 setShowLogin(false);
 setLoginFocus(false);
+setAttempts(0);
 
 }else{
 
-alert("Wrong password");
+const newAttempts = attempts + 1;
+setAttempts(newAttempts);
+
+alert("❌ Wrong password!");
+
+if(newAttempts >= 3){
+
+const waitTime = 30000 * newAttempts;
+
+setLockTime(Date.now() + waitTime);
+
+setShowLogin(false);
+setLoginFocus(false);
+
+alert(`😂 Too many wrong attempts!\nTry again after ${waitTime/1000}s`);
+
+}
 
 }
 
@@ -248,9 +275,7 @@ const filteredTeam = Array.isArray(team)
 
 return(
 
-<div className="w-full min-h-screen overflow-x-hidden">
-
-<div className={`text-white font-sans transition-all duration-500
+<div className={`w-full min-h-screen overflow-x-hidden text-white font-sans transition-all duration-500
 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800
 
 ${loginFocus ? "scale-95 opacity-60 blur-sm" : "scale-100 opacity-100"}
@@ -503,7 +528,7 @@ setEditingMember(null);
 setShowForm(true);
 
 }}
-className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition"
+className="fixed bottom-12 right-12 bg-indigo-600 w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition"
 >
 
 <FaPlus/>
@@ -513,7 +538,6 @@ className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex it
 )}
 
 
-</div>
 {/* LOGIN */}
 
 {showLogin && (
@@ -522,7 +546,20 @@ className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex it
 
 <div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease]">
 
-<h2 className="text-xl font-bold mb-4">Admin Login</h2>
+<div className="flex justify-between items-center mb-4">
+<h2 className="text-xl font-bold">Admin Login</h2>
+
+<button
+onClick={()=>{
+setShowLogin(false);
+setLoginFocus(false);
+}}
+className="text-gray-500 hover:text-black text-lg font-bold"
+>
+✕
+</button>
+
+</div>
 
 <input
 type="password"
