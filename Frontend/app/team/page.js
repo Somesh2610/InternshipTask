@@ -3,9 +3,13 @@
 import { useEffect, useState } from "react";
 import { FaTrash, FaEdit, FaUserShield, FaPlus, FaSearch } from "react-icons/fa";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export default function TeamPage() {
 
+    
 const [team,setTeam]=useState([]);
+const [loading,setLoading]=useState(true);
 
 const [adminMode,setAdminMode]=useState(false);
 const [showLogin,setShowLogin]=useState(false);
@@ -36,11 +40,12 @@ useEffect(() => {
 
 const loadTeam = async () => {
   try {
-    const res = await fetch("https://internshiptask-86c7.onrender.com/team");
+    const res = await fetch(`${API_URL}/team`);
 
     const data = await res.json();
 
     setTeam(data);
+    setLoading(false);
 
   } catch (err) {
     console.error("Failed to load team:", err);
@@ -79,12 +84,14 @@ setAdminMode(false);
 
 
 
-const deleteMember=async(id)=>{
+const deleteMember = async (id) => {
 
-await fetch(`https://internshiptask-86c7.onrender.com/team/${id}`,{
+const confirmDelete = confirm("Are you sure you want to delete this member?");
 
+if(!confirmDelete) return;
+
+await fetch(`${API_URL}/team/${id}`,{
 method:"DELETE"
-
 });
 
 setTeam(team.filter(member=>member.id!==id));
@@ -126,7 +133,7 @@ linkedin
 
 };
 
-await fetch(`https://internshiptask-86c7.onrender.com/team/${editingMember.id}`,{
+await fetch(`${API_URL}/team/${editingMember.id}`,{
 
 method:"PUT",
 headers:{ "Content-Type":"application/json" },
@@ -151,7 +158,7 @@ linkedin
 
 };
 
-await fetch("https://internshiptask-86c7.onrender.com/team",{
+await fetch(`${API_URL}/team`,{
 
 method:"POST",
 headers:{ "Content-Type":"application/json" },
@@ -372,7 +379,11 @@ The amazing people building our company
 
 
 {/* SEARCH */}
-
+{loading && (
+<p className="text-center text-gray-400 text-lg">
+Loading team...
+</p>
+)}
 
 <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 px-6 pb-20">
 
@@ -660,6 +671,9 @@ Save
 </div>
 
 )}
+<footer className="text-center py-6 text-gray-400 border-t border-white/10">
+© 2026 Armatrix Team Portal
+</footer>
 
 </div>
 
