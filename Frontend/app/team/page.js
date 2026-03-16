@@ -56,41 +56,17 @@ loadTeam();
 
 
 
-const checkPassword = () => {
+const checkPassword=()=>{
 
-const now = Date.now();
-
-if(now < lockTime){
-alert("😂 Too many wrong attempts! Try again later.");
-return;
-}
-
-if(password === ADMIN_PASSWORD){
+if(password===ADMIN_PASSWORD){
 
 setAdminMode(true);
 setShowLogin(false);
 setLoginFocus(false);
-setAttempts(0);
 
 }else{
 
-const newAttempts = attempts + 1;
-setAttempts(newAttempts);
-
-alert("❌ Wrong password!");
-
-if(newAttempts >= 3){
-
-const waitTime = 30000 * newAttempts;
-
-setLockTime(Date.now() + waitTime);
-
-setShowLogin(false);
-setLoginFocus(false);
-
-alert(`😂 Too many wrong attempts!\nTry again after ${waitTime/1000}s`);
-
-}
+alert("Wrong password");
 
 }
 
@@ -528,7 +504,7 @@ setEditingMember(null);
 setShowForm(true);
 
 }}
-className="fixed bottom-12 right-12 bg-indigo-600 w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition"
+className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition"
 >
 
 <FaPlus/>
@@ -538,12 +514,11 @@ className="fixed bottom-12 right-12 bg-indigo-600 w-14 h-14 rounded-full flex it
 )}
 
 
-
 {/* LOGIN */}
 
 {showLogin && (
 
-<div className="fixed inset-0 bg-black/40 backdrop-blur-0 flex items-center justify-center z-50">
+<div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
 
 <div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease]">
 
