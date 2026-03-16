@@ -423,7 +423,7 @@ LinkedIn
 <div className="flex justify-center gap-4 mt-5">
 
 <FaEdit
-size={24}
+size={30}
 className="cursor-pointer text-gray-700 hover:text-white hover:bg-red-500 p-1 rounded transition-all duration-200"
 onClick={(e)=>{e.stopPropagation();openEditForm(member)}}
 />
