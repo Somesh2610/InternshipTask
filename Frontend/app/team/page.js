@@ -486,11 +486,11 @@ onClick={(e)=>{e.stopPropagation();deleteMember(member.id)}}
 
 <div className="fixed inset-0 bg-black/70 flex items-center justify-center">
 
-<div className="bg-white text-black p-10 rounded-3xl w-[400px] text-center">
+<div className="bg-white text-black p-10 rounded-3xl w-[420px] text-center shadow-2xl">
 
 <img
-src={selectedMember.photo}
-className="w-32 h-32 rounded-full mx-auto mb-6 object-cover"
+src={selectedMember.photo || "https://randomuser.me/api/portraits/men/10.jpg"}
+className="w-32 h-32 rounded-full mx-auto mb-6 object-cover border-4 border-indigo-500"
 />
 
 <h2 className="text-2xl font-bold mb-2">{selectedMember.name}</h2>
@@ -499,23 +499,40 @@ className="w-32 h-32 rounded-full mx-auto mb-6 object-cover"
 
 <p className="text-gray-600 mb-6">{selectedMember.bio}</p>
 
+<div className="flex justify-center gap-6 mt-4">
+
 <a
 href={selectedMember.linkedin}
 target="_blank"
-className="bg-indigo-600 text-white px-4 py-2 rounded"
+rel="noopener noreferrer"
+className="text-indigo-600 hover:scale-125 hover:-translate-y-1 transition"
 >
-
-LinkedIn
-
+<FaLinkedin size={24}/>
 </a>
+
+<a
+href={`mailto:${selectedMember.email}`}
+className="text-red-500 hover:scale-125 hover:-translate-y-1 transition"
+>
+<FaEnvelopeOpen size={24}/>
+</a>
+
+<a
+href={selectedMember.resume}
+target="_blank"
+rel="noopener noreferrer"
+className="text-gray-700 hover:scale-125 hover:-translate-y-1 transition"
+>
+<FaFileAlt size={24}/>
+</a>
+
+</div>s
 
 <button
 onClick={()=>setShowProfile(false)}
-className="block mx-auto mt-6 text-gray-500"
+className="mt-6 text-gray-500 hover:text-red-500 transition"
 >
-
 Close
-
 </button>
 
 </div>
