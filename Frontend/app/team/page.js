@@ -74,9 +74,9 @@ return () => window.removeEventListener("keydown", handleEsc);
 
 
 
-const checkPassword=()=>{
+const checkPassword = () => {
 
-if(password===ADMIN_PASSWORD){
+if(password === ADMIN_PASSWORD){
 
 setAdminMode(true);
 setShowLogin(false);
@@ -85,6 +85,17 @@ setLoginFocus(false);
 }else{
 
 alert("Wrong password");
+
+}
+
+};
+
+
+const handleLoginEnter = (e) => {
+
+if(e.key === "Enter"){
+
+checkPassword();
 
 }
 
@@ -201,7 +212,7 @@ setLinkedin("");
 
 const handleKeyDown=(e)=>{
 
-if(e.key==="Enter"){
+if(e.key==="Enter" && showForm){
 
 saveMember();
 
@@ -274,12 +285,10 @@ return(
 
 {/* NAVBAR */}
 
-<nav className="sticky top-0 z-50 flex flex-col md:flex-row md:justify-between md:items-center px-6 lg:px-12 py-4 backdrop-blur-md bg-slate-900/70 border-b border-white/10 w-full">
+<nav className="sticky top-0 z-50 flex flex-col md:flex-row md:justify-between md:items-center px-6 lg:px-12 py-4 backdrop-blur-md bg-slate-900/60 backdrop-blur-lg border-b border-white/10 shadow-lg w-full">
 
-<h1 className="text-3xl font-bold tracking-wide text-indigo-300">
-
+<h1 className="text-3xl font-extrabold tracking-wide text-indigo-400 hover:text-indigo-300 transition cursor-pointer">
 Armatrix
-
 </h1>
 
 <div className="flex items-center gap-4 flex-wrap mt-3 md:mt-0">
@@ -307,14 +316,19 @@ onClick={()=>setSearchOpen(!searchOpen)}
 
 </div>
 
-<a className="hover:text-indigo-300 cursor-pointer">Home</a>
-<a className="hover:text-indigo-300 cursor-pointer">Team</a>
+<a className="hover:text-indigo-300 cursor-pointer transition hover:scale-105">
+Home
+</a>
+
+<a className="hover:text-indigo-300 cursor-pointer transition hover:scale-105">
+Team
+</a>
 
 {!adminMode && (
 
 <FaUserShield
 size={22}
-className="cursor-pointer hover:text-indigo-300"
+className="cursor-pointer hover:text-indigo-300 hover:scale-110 transition"
 onClick={()=>{
 setShowLogin(true);
 setLoginFocus(true);
@@ -422,33 +436,75 @@ className="w-28 h-28 rounded-full mx-auto mb-4 border-4 border-indigo-500 object
 </p>
 <div className="flex justify-end gap-4 mt-4 pt-3 border-t border-gray-200">
 
+{member.linkedin ? (
+
 <a
 href={member.linkedin}
 target="_blank"
 rel="noopener noreferrer"
 onClick={(e)=>e.stopPropagation()}
-className="text-indigo-600 hover:scale-125 transition"
+className="text-indigo-600 hover:scale-125 hover:-translate-y-1 transition"
+title="View LinkedIn"
 >
 <FaLinkedin size={20}/>
 </a>
 
+) : (
+
+<span
+className="text-gray-400 cursor-not-allowed"
+title="No LinkedIn attached"
+>
+<FaLinkedin size={20}/>
+</span>
+
+)}
+
+{member.email ? (
+
 <a
 href={`mailto:${member.email}`}
 onClick={(e)=>e.stopPropagation()}
-className="text-red-500 hover:scale-125 transition"
+className="text-red-500 hover:scale-125 hover:-translate-y-1 transition"
+title="Send Email"
 >
 <FaEnvelopeOpen size={20}/>
 </a>
+
+) : (
+
+<span
+className="text-gray-400 cursor-not-allowed"
+title="No email attached"
+>
+<FaEnvelopeOpen size={20}/>
+</span>
+
+)}
+
+{member.resume ? (
 
 <a
 href={member.resume}
 target="_blank"
 rel="noopener noreferrer"
 onClick={(e)=>e.stopPropagation()}
-className="text-gray-700 hover:scale-125 transition"
+className="text-gray-700 hover:scale-125 hover:-translate-y-1 transition"
+title="View Resume"
 >
 <FaFileAlt size={20}/>
 </a>
+
+) : (
+
+<span
+className="text-gray-400 cursor-not-allowed"
+title="No resume uploaded"
+>
+<FaFileAlt size={20}/>
+</span>
+
+)}
 
 </div>
 
@@ -526,7 +582,7 @@ className="text-gray-700 hover:scale-125 hover:-translate-y-1 transition"
 <FaFileAlt size={24}/>
 </a>
 
-</div>s
+</div>
 
 <button
 onClick={()=>setShowProfile(false)}
@@ -602,7 +658,7 @@ type="password"
 placeholder="Enter password"
 className="border p-2 w-full mb-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
 onChange={(e)=>setPassword(e.target.value)}
-onKeyDown={handleKeyDown}
+onKeyDown={handleLoginEnter}
 />
 
 <button
