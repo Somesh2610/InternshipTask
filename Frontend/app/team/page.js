@@ -8,7 +8,7 @@ FaUserShield,
 FaPlus,
 FaSearch,
 FaLinkedin,
-FaEnvelope,
+FaEnvelopeOpen,
 FaFileAlt
 } from "react-icons/fa";
 
@@ -395,7 +395,7 @@ The amazing people building our company
 <div
 key={member.id}
 onClick={()=>{setSelectedMember(member);setShowProfile(true)}}
-className="bg-white text-black rounded-3xl shadow-xl p-8 text-center relative transition-all duration-500 hover:-translate-y-5 hover:scale-105 hover:bg-gradient-to-br hover:from-yellow-300 hover:to-amber-500 hover:text-black hover:shadow-yellow-400/50 cursor-pointer"
+className="bg-white text-black rounded-3xl shadow-xl p-8 text-center flex flex-col justify-between transition-all duration-500 hover:-translate-y-5 hover:scale-105 hover:bg-gradient-to-br hover:from-yellow-300 hover:to-amber-500 hover:text-black hover:shadow-yellow-400/50 cursor-pointer"
 >
 
 <img
@@ -415,12 +415,12 @@ className="w-28 h-28 rounded-full mx-auto mb-4 border-4 border-indigo-500 object
 
 </p>
 
-<p className="text-gray-600 text-sm">
+<p className="text-gray-600 text-sm mb-3">
 
 {member.bio}
 
 </p>
-<div className="absolute bottom-5 right-6 flex gap-4">
+<div className="flex justify-end gap-4 mt-4 pt-3 border-t border-gray-200">
 
 <a
 href={member.linkedin}
@@ -437,7 +437,7 @@ href={`mailto:${member.email}`}
 onClick={(e)=>e.stopPropagation()}
 className="text-red-500 hover:scale-125 transition"
 >
-<FaEnvelope size={20}/>
+<FaEnvelopeOpen size={20}/>
 </a>
 
 <a
