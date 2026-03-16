@@ -538,11 +538,12 @@ className="fixed bottom-12 right-12 bg-indigo-600 w-14 h-14 rounded-full flex it
 )}
 
 
+
 {/* LOGIN */}
 
 {showLogin && (
 
-<div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
+<div className="fixed inset-0 bg-black/40 backdrop-blur-0 flex items-center justify-center z-50">
 
 <div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease]">
 
