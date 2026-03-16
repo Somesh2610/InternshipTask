@@ -253,7 +253,7 @@ handleImageUpload(file);
 
 const filteredTeam = Array.isArray(team)
   ? team.filter(member =>
-      member.name.toLowerCase().includes(search.toLowerCase())
+      (member.name || "").toLowerCase().includes(search.toLowerCase())
     )
   : [];
 
@@ -264,7 +264,7 @@ return(
 <div className={`w-full min-h-screen overflow-x-hidden text-white font-sans transition-all duration-500
 bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-800
 
-${loginFocus ? "scale-95 opacity-60 blur-sm" : "scale-100 opacity-100"}
+${loginFocus ? "scale-95 opacity-60" : "scale-100 opacity-100"}
 
 `}>
 
@@ -550,7 +550,7 @@ className="fixed bottom-10 right-10 bg-indigo-600 w-14 h-14 rounded-full flex it
 
 <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50">
 
-<div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease]">
+<div className="bg-white text-black p-8 rounded-3xl w-80 shadow-2xl scale-100 animate-[zoomIn_.3s_ease] backdrop-blur-0">
 
 <div className="flex justify-between items-center mb-4">
 <h2 className="text-xl font-bold">Admin Login</h2>
