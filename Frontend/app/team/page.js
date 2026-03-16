@@ -94,7 +94,7 @@ await fetch(`${API_URL}/team/${id}`,{
 method:"DELETE"
 });
 
-setTeam(team.filter(member=>member.id!==id));
+setTeam(prev => prev.filter(member => member.id !== id));
 
 };
 
@@ -247,7 +247,7 @@ handleImageUpload(file);
 
 const filteredTeam = Array.isArray(team)
   ? team.filter(member =>
-      member.name.toLowerCase().includes(search.toLowerCase())
+      (member.name || "").toLowerCase().includes(search.toLowerCase())
     )
   : [];
 
@@ -379,11 +379,13 @@ The amazing people building our company
 
 
 {/* SEARCH */}
-{loading && (
-<p className="text-center text-gray-400 text-lg">
+{loading ? (
+
+<p className="text-center text-gray-400 text-lg mt-10">
 Loading team...
 </p>
-)}
+
+) : (
 
 <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 px-6 pb-20">
 
@@ -454,6 +456,8 @@ onClick={(e)=>{e.stopPropagation();deleteMember(member.id)}}
 ))}
 
 </div>
+
+)}
 
 
 
