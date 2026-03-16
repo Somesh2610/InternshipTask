@@ -1,7 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaTrash, FaEdit, FaUserShield, FaPlus, FaSearch } from "react-icons/fa";
+import {
+FaTrash,
+FaEdit,
+FaUserShield,
+FaPlus,
+FaSearch,
+FaLinkedin,
+FaEnvelope,
+FaFileAlt
+} from "react-icons/fa";
 
 export default function TeamPage() {
 
@@ -14,14 +23,15 @@ const [showProfile,setShowProfile]=useState(false);
 
 const [password,setPassword]=useState("");
 
-const [attempts,setAttempts] = useState(0);
-const [lockTime,setLockTime] = useState(0);
+
 
 const [name,setName]=useState("");
 const [role,setRole]=useState("");
 const [bio,setBio]=useState("");
 const [photo,setPhoto]=useState("");
 const [linkedin,setLinkedin]=useState("");
+const [email,setEmail]=useState("");
+const [resume,setResume]=useState("");
 
 const [editingMember,setEditingMember]=useState(null);
 const [selectedMember,setSelectedMember]=useState(null);
@@ -119,14 +129,14 @@ if(!name || !role) return;
 if(editingMember){
 
 const updated={
-
 ...editingMember,
 name,
 role,
 bio,
 photo,
-linkedin
-
+linkedin,
+email,
+resume
 };
 
 await fetch(`https://internshiptask-86c7.onrender.com/team/${editingMember.id}`,{
@@ -144,14 +154,14 @@ setTeam(team.map(m=>m.id===editingMember.id?updated:m));
 else{
 
 const newMember={
-
 id:Date.now(),
 name,
 role,
 bio,
 photo,
-linkedin
-
+linkedin,
+email,
+resume
 };
 
 await fetch("https://internshiptask-86c7.onrender.com/team",{
@@ -382,7 +392,7 @@ The amazing people building our company
 <div
 key={member.id}
 onClick={()=>{setSelectedMember(member);setShowProfile(true)}}
-className="bg-white text-black rounded-3xl shadow-xl p-8 text-center transition-all duration-500 hover:-translate-y-5 hover:scale-105 hover:bg-gradient-to-br hover:from-yellow-300 hover:to-amber-500 hover:text-black hover:shadow-yellow-400/50 cursor-pointer"
+className="bg-white text-black rounded-3xl shadow-xl p-8 text-center relative transition-all duration-500 hover:-translate-y-5 hover:scale-105 hover:bg-gradient-to-br hover:from-yellow-300 hover:to-amber-500 hover:text-black hover:shadow-yellow-400/50 cursor-pointer"
 >
 
 <img
@@ -407,17 +417,37 @@ className="w-28 h-28 rounded-full mx-auto mb-4 border-4 border-indigo-500 object
 {member.bio}
 
 </p>
+<div className="absolute bottom-5 right-6 flex gap-4">
 
 <a
 href={member.linkedin}
 target="_blank"
-className="inline-block mt-4 bg-indigo-600 text-white px-4 py-2 rounded"
+rel="noopener noreferrer"
+onClick={(e)=>e.stopPropagation()}
+className="text-indigo-600 hover:scale-125 transition"
 >
-
-LinkedIn
-
+<FaLinkedin size={20}/>
 </a>
 
+<a
+href={`mailto:${member.email}`}
+onClick={(e)=>e.stopPropagation()}
+className="text-red-500 hover:scale-125 transition"
+>
+<FaEnvelope size={20}/>
+</a>
+
+<a
+href={member.resume}
+target="_blank"
+rel="noopener noreferrer"
+onClick={(e)=>e.stopPropagation()}
+className="text-gray-700 hover:scale-125 transition"
+>
+<FaFileAlt size={20}/>
+</a>
+
+</div>
 
 {adminMode && (
 
@@ -639,11 +669,24 @@ onChange={(e)=>setBio(e.target.value)}
 
 <input
 placeholder="LinkedIn URL"
-className="w-full mb-6 p-3 rounded-xl border"
+className="w-full mb-3 p-3 rounded-xl border"
 value={linkedin}
 onChange={(e)=>setLinkedin(e.target.value)}
 />
 
+<input
+placeholder="Email"
+className="w-full mb-3 p-3 rounded-xl border"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
+/>
+
+<input
+placeholder="Resume Link"
+className="w-full mb-6 p-3 rounded-xl border"
+value={resume}
+onChange={(e)=>setResume(e.target.value)}
+/>
 
 
 <div className="flex gap-3">
