@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Armatrix Team Page
 
-## Getting Started
+A full-stack Team Management Web Application built using Next.js (frontend), FastAPI (backend), and MongoDB (database).  
+This project allows users to view team members and provides an admin panel to manage them.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🌐 Live Demo
+
+- Frontend: (Add your Vercel link here)  
+- Backend API: (Add your Render link here)  
+
+---
+
+## 📌 Features
+
+### 👥 User Features
+- View all team members
+- Clean and responsive UI
+- Search team members by name
+- View detailed profile popup
+- Conditional rendering (LinkedIn, Email, Resume)
+
+### 🔐 Admin Features
+- Secure admin login (basic)
+- Add new team members
+- Edit existing members
+- Delete members
+- Image upload with preview (base64)
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- Next.js (React)
+- Tailwind CSS
+- React Icons
+
+### Backend
+- FastAPI (Python)
+- REST API
+
+### Database
+- MongoDB Atlas
+
+### Deployment
+- Frontend → Vercel  
+- Backend → Render  
+
+---
+
+## ⚙️ Project Structure
+
+Frontend (Next.js)
+```
+app/
+  page.js
+components/
+styles/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Backend (FastAPI)
+```
+main.py
+MongoDB Database
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔗 API Endpoints
 
-## Learn More
+| Method | Endpoint        | Description              |
+|--------|---------------|--------------------------|
+| GET    | /team         | Get all members          |
+| POST   | /team         | Add new member           |
+| PUT    | /team/{id}    | Update member            |
+| DELETE | /team/{id}    | Delete member            |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧠 Key Concepts Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Full-stack integration (Frontend ↔ Backend ↔ Database)
+- REST API design
+- React state management (useState, useEffect)
+- Conditional rendering
+- File handling (image upload)
+- Deployment and hosting
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ⚠️ Known Limitations
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Admin password is stored in frontend (not secure for production)
+- No proper authentication (JWT not implemented)
+- Images stored as base64 (can be optimized)
+
+---
+
+## 🚀 Future Improvements
+
+- Add JWT-based authentication
+- Store images using Cloudinary / AWS S3
+- Add pagination for large datasets
+- Improve error handling and user feedback
+- Add rate limiting for security
+
+---
+
+## 🧑‍💻 Author
+
+Somesh Pradeep Huljute  
+BITS Pilani – Electronics & Communication  
+
+---
+
+## 💡 Note
+
+This project was built as part of an internship assignment and demonstrates full-stack development, deployment, and problem-solving skills.
